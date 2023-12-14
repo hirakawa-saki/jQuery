@@ -17,24 +17,31 @@ $(function () {
     }
 
 
-  $.ajax({
-    url: `https://ci.nii.ac.jp/books/opensearch/search?title=${searchWord}&format=json&p=${pageNum}&count=20`,
-    method: "GET",
-    dataType:'jsonp',
+    // 変数settingsに設定情報などを格納
+    const settings = {
+      "url": `https://ci.nii.ac.jp/books/opensearch/search?title=${searchWord}&format=json&p=${pageNum}&count=20`,
+      "method": "GET",
+    }
 
+    $.ajax(settings).done(function (response) {
+      const result = response['@graph'];
+      displayResult(result)
+      console.log(result);
+    }).fail(function (err) {
+      displayError(err)
+    });
 
-  }).done(function (response) {
-      if (response.count > 0) {
+    function displayResult(data) {
+      if (data[0].items) {
         var list = "";
         $(".comment").remove();
-        for (var i = 0; i < response.Items.length; i++) {
-          list += `<li class=lists__item>` +
-            `<div class=lists__item__inner>` +
-            `<a href=${response.Items[i].Item.itemUrl} class=lists__item__link target=_blank>` +
-            `<img src=${response.Items[i].Item.largeImageUrl} class=lists__item__img alt>` +
-            `<p class=lists__item__detail>作品名：　${response.Items[i].Item.title}</p>` +
-            `<p class=lists__item__detail>作者　：　${response.Items[i].Item.author}</p>` +
-            `<p class=lists__item__detail>出版社：　${response.Items[i].Item.publisherName}</p>` + `</a>` +
+        for (var i = 0; i < data[0].items.length; i++) {
+          list += `<li class=lists-item>` +
+            `<div class=list-inner>` +
+            `<p>作品名：　${data[0].items[i].title}</p>` +
+            `<p>作者　：　${data[0].items[i]["dc:creator"]}</p>` +
+            `<p>出版社：　${data[0].items[i]["dc:publisher"]}</p>` +
+            `<a href=${data[0].items[i]["@id"]} target=_blank>書籍情報</a>` +
             `</div>` + `</li>`;
         };
         $(".lists").prepend(list);
@@ -43,12 +50,8 @@ $(function () {
         $(".lists").before("<div class='comment'></div>");
         $(".comment").html("<p class='message'>検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</p>");
       };
-    })
-      .fail(function (err) {
-        $(".message").remove();
-        displayError(err);
-      });
-  });
+    }
+  })
 });
 
 
@@ -64,6 +67,7 @@ $(".reset-btn").on("click", function () {
 function displayError(err) {
   $(".lists").before('<div class="message">エラーが発生しました。<br>再度更新してください。</div>');
 }//APIがうまく送信されなかったときのエラー
+
 
 
 //  変数settingsに設定情報などを格納
