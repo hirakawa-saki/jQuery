@@ -52,21 +52,26 @@ $(function () {
       };
     }
   })
+
+  $(".reset-btn").on("click", function () {
+    pageNum = 0;
+    prevWord = "";
+    $(".lists").empty();
+    $("#search-input").val("");
+    $(".message").remove();
+  });//リセットボタンを押すとページ数を１に、検索結果と条件をリセット
+
+  function displayError(err) {
+    $(".lists").before('<div class="message">エラーが発生しました。<br>再度更新してください。</div>');
+  }//APIがうまく送信されなかったときのエラー
+  
 });
 
 
-$(".reset-btn").on("click", function () {
-  pageNum = 0;
-  prevWord = "";
-  $(".lists").empty();
-  $("#search-input").val("");
-  $(".message").remove();
-});//リセットボタンを押すとページ数を１に、検索結果と条件をリセット
 
 
-function displayError(err) {
-  $(".lists").before('<div class="message">エラーが発生しました。<br>再度更新してください。</div>');
-}//APIがうまく送信されなかったときのエラー
+
+
 
 
 

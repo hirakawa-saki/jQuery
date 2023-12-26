@@ -3,9 +3,9 @@
 $(function () {
   $(".btn__submit").on("click", function () {
     // アカウント作成ボタンクリックしたときの処理
-    var familyName = $(".family__name").val();
+    var familyName = $("#family__name").val();
     // family__nameのvalue値を変数に格納する。
-    var givenName = $(".given__name").val();
+    var givenName = $("#given__name").val();
     // given__nameのvalue値を変数に格納する。
     console.log("名字" + familyName);
     // 名字＋変数familyNameをコンソールに表示させる。
@@ -51,7 +51,7 @@ $(function () {
 
     var subscription = [];
     // 空の配列を作成し、購読情報を格納させる変数を定義。
-    $("subscription__checkbox.:checked").each(function(){
+    $(".subscription__checkbox:checked").each(function(){
       // subscription__checkboxでチェックボックスが選択されたものを選択
       // each()メソッドで選択された要素ごとに処理を行う。
       subscription.push($(this).val());
@@ -61,7 +61,5 @@ $(function () {
     // コンソールログでsubscription配列の内容を出力。
     // join()メソッドを使用して配列内の値をコンマで区切って結合させる。
   });
-
-
 
 })
